@@ -20,29 +20,23 @@ def cut_rod(prices,n):
         q = max(q,prices[i] + cut_rod(prices,n-i))
     return q
     
-def cut_rod_test():
+def memoized_cut_rod(prices,n):
+    """cut_rod using a top down memoization approach.
+    """
     
-    tests = [
-        [[0,1],1],
-        [[0,1,1],1],
-        [[0,1,1],2],
-        [[0,1,2,0],3],
-        [[0,0.5,2,3,0,10,0],6],
-        [[0,0.5,2,3,12,10,0],6],
-        [[0,0.5,2,3,12,10,0,0],7],
-        [gen_randomint_dist(10,0,0,0,1),9],
-        [gen_randomint_dist(20,0,0,0,1),19]
-#        [gen_randomint_dist(30,0,0,0,1),29]
- #       [gen_randomint_dist(40,0,0,0,1),39],
-#        [gen_randomint_dist(50,0,0,0,1),49]
-#        [gen_randomint_dist(100,0,0,0,1),99]
-    ]
-    for test in tests:
-        ps = test[0]
-        n = test[1]
-        pn("ps",ps)
-        pn("n",n)
-        try:
-            pn("best",cut_rod(ps,n))
-        except Exception as e:
-            pn("Error",e)
+    r = [False] * (n+1) # use False to denote unknown
+    return memoized_cut_rod_aux(prices,n,r)
+    
+def memoized_cut_rod_aux(prices,n,r):
+    
+    if r[n] != False:
+        return r[n]
+        
+    if n == 0:
+        q = 0
+    else:
+        q = prices[1] + memoized_cut_rod_aux(prices,n-1,r)
+        for i in range(2,n):
+            q = max(q,prices[i] + memoized_cut_rod_aux(prices,n-i,r))
+    r[n] = q # record value, this is where "memo" comes from
+    return q

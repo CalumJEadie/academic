@@ -7,9 +7,9 @@ import time
 
 import dynamic_programming
 
-class TestDynamicProgramming(unittest.TestCase):
+class TestCutRod(unittest.TestCase):
 
-    def test_cut_rod_small(self):
+    def test_small(self):
     
         tests = [
             [[0,1],1],
@@ -21,15 +21,15 @@ class TestDynamicProgramming(unittest.TestCase):
             [[0,0.5,2,3,12,10,0,0],7]
         ]
         for test in tests:
-            self.do_test_cut_rod(test[0],test[1])
+            self.do_test(test[0],test[1])
             
-    def test_cut_rod_large(self):
+    def test_large(self):
     
         tests = [[gen_randomint_dist(n+1,0,0,0,1),n] for n in range (15,23)]
         for test in tests:
-            self.do_test_cut_rod(test[0],test[1])
+            self.do_test(test[0],test[1])
             
-    def do_test_cut_rod(self,ps,n):
+    def do_test(self,ps,n):
     
         p("ps",ps)
         p("n",n)
@@ -47,5 +47,5 @@ class TestDynamicProgramming(unittest.TestCase):
 if __name__ == "__main__":
 
     #unittest.main()
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestDynamicProgramming)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestCutRod)
     unittest.TextTestRunner(verbosity=2).run(suite)
