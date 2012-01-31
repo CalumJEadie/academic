@@ -9,13 +9,18 @@ class LineTest(WhiteboardWindow,threading.Thread):
 
     def __init__(self):
 
-        WhiteboardWindow.__init__(self,defaultPeriod=0.01)        
+        WhiteboardWindow.__init__(self,defaultPeriod=0)        
         threading.Thread.__init__(self)
         self.daemon = True
         
     """Perform testing in different thread to allow for viewing progress of algorithms
     in real time."""
     def run(self):
+    
+        p0 = Point(50,50)
+        p1s = self.square(p0,70,5)
+        for p1 in p1s:
+            self.draw(p1)
     
 #        for x in range(10,14):
 #            for y in range(10,14):
@@ -45,14 +50,16 @@ class LineTest(WhiteboardWindow,threading.Thread):
 #            x += step
 
         p0 = Point(50,50)
-        p1s = square(p0,40,5)
+        p1s = self.square(p0,40,5)
         for p1 in p1s:
-            drawing.midpoint_line(self,p0,p1)
+#            drawing.midpoint_line(self,p0,p1)
+            self.draw(p1)
+            drawing.bresenham2(self,p0,p1)
     
     """Generates a collection of endpoints that form are the perimeter of a square
     of side 2r and center p0.
     """
-    def square(p0,r,step=1):
+    def square(self,p0,r,step=1):
         x = p0.x + r/2
         y = p0.y + r/2
         p1s = [Point(x,y)]
@@ -65,7 +72,7 @@ class LineTest(WhiteboardWindow,threading.Thread):
         while x < p0.x + r/2:
             x += step
             p1s.append(Point(x,y))
-        while y < p0.y - r/2:
+        while y < p0.y + r/2:
             y += step
             p1s.append(Point(x,y))
         return p1s

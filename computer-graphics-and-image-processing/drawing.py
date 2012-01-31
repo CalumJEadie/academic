@@ -51,6 +51,17 @@ def bresenham2(wb,p1,p2):
                     bresenham2_3(wb,p1,p2)
                 else:
                     bresenham2_4(wb,p1,p2)
+        else:
+            if dx > 0:
+                if dydx <= -0.5:
+                    bresenham2_3(wb,p2,p1)
+                else:
+                    bresenham2_4(wb,p2,p1)
+            else:
+                if dydx <= 0.5:
+                    bresenham2_1(wb,p2,p1)
+                else:
+                    bresenham2_2(wb,p2,p1)
                     
 def bresenham2_1(wb,p1,p2):
 
@@ -124,10 +135,10 @@ def midpoint_line(wb,p1,p2):
     b = -(p2.x-p1.x)
     c = p2.x*p1.y - p1.x*p2.y
     x = round(p1.x)
-    y = round(p1.y - ((x-p0.x)/(float(a)/b)))
+    y = round(p1.y - ((x-p1.x)/(float(a)/b)))
     d = a*(x+1) + b*(y+0.5) + c
     
-    draw(Point(x,y))
+    wb.draw(Point(x,y))
     
     while x < (p2.x-0.5):
         x += 1
@@ -136,4 +147,4 @@ def midpoint_line(wb,p1,p2):
         else:
             d += a + b
             y += 1
-        draw(Point(x,y))
+        wb.draw(Point(x,y))
