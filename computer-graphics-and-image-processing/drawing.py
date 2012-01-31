@@ -115,3 +115,25 @@ def bresenham2_4(wb,p1,p2):
         yi -= dydx
         y = round(yi)
         wb.draw(Point(x,y))
+        
+def midpoint_line(wb,p1,p2):
+
+    print "Midpoint Line: {0} -> {1}".format(p1,p2)
+    
+    a = p2.y-p1.y
+    b = -(p2.x-p1.x)
+    c = p2.x*p1.y - p1.x*p2.y
+    x = round(p1.x)
+    y = round(p1.y - ((x-p0.x)/(float(a)/b)))
+    d = a*(x+1) + b*(y+0.5) + c
+    
+    draw(Point(x,y))
+    
+    while x < (p2.x-0.5):
+        x += 1
+        if d < 0:
+            d += a
+        else:
+            d += a + b
+            y += 1
+        draw(Point(x,y))
