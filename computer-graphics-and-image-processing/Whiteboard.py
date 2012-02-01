@@ -18,6 +18,18 @@ class Point:
         
     def __str__(self):
         return "Point({0},{1})".format(self.x,self.y)
+        
+    def __add__(self,other):
+        return Point(self.x+other.x,self.y+other.y)
+        
+    def __mul__(self,factor):
+        # http://docs.python.org/reference/datamodel.html
+        if isinstance(factor,int) or isinstance(factor,float):
+            return Point(self.x*factor,self.y*factor)
+        else:
+            return NotImplemented
+            
+    __rmul__ = __mul__
     
     @staticmethod
     def fromPoint(point):
