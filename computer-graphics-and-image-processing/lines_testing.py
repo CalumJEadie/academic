@@ -9,7 +9,7 @@ class LineTest(WhiteboardWindow,threading.Thread):
 
     def __init__(self):
 
-        WhiteboardWindow.__init__(self,defaultPeriod=0)        
+        WhiteboardWindow.__init__(self,defaultPeriod=0,height=200,width=200)        
         threading.Thread.__init__(self)
         self.daemon = True
         
@@ -51,6 +51,13 @@ class LineTest(WhiteboardWindow,threading.Thread):
 
         p0 = Point(50,50)
         p1s = self.square(p0,40,5)
+        for p1 in p1s:
+#            drawing.midpoint_line(self,p0,p1)
+            self.draw(p1)
+            drawing.bresenham2(self,p0,p1)
+
+        p0 = Point(100,100)
+        p1s = self.square(p0,60.5,5)
         for p1 in p1s:
 #            drawing.midpoint_line(self,p0,p1)
             self.draw(p1)

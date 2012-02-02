@@ -205,6 +205,10 @@ class Line:
     def interpolate(self,s):
     
         return Point((1-s)*self.p0.x+s*self.p1.x,(1-s)*self.p0.y+s*self.p1.y)
+        
+    def draw(self,wb):
+    
+        bresenham2(wb,self.p0,self.p1)
     
 class BezierCubic:
 
@@ -274,3 +278,37 @@ def dist_point_to_line(line,p):
         return dist_point_to_point(l1,p)
     else:
         return dist_point_to_point(line.interpolate(s),p)
+        
+class BoundingBox:
+
+    def __init__(self,xl,xr,yb,yt):
+        self.xl = xl
+        self.xr = xr
+        self.yb = yb
+        self.yt = yt
+        
+def cohan_sutherland_clipper(box,line):
+
+    l0 = line.p0
+    l1 = line.p1
+
+    # 4 bit code, one bit for each inquality
+    a0 = l0.x < box.xl
+    b0 = l0.x > box.xr
+    c0 = l0.y < box.yl
+    d0 = l0.y > box.yr
+    
+    a1 = l1.x < box.xl
+    b1 = l1.x > box.xr
+    c1 = l1.y < box.yl
+    d1 = l1.y > box.yr
+    
+    if (a0 | b0 | c0 | d0 | a1 | b1 | c1 | d1) == False:
+        # Accept
+        line.draw()
+    elif ((a0&a1) | (b0&b1) | (c0&c1) | (d0&d1)) == False:
+        # Need to clip
+        
+        return NotImplemented
+        
+    # Otherwise reject, both ends outside.
