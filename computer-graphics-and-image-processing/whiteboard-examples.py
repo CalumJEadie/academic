@@ -8,9 +8,9 @@ w = Whiteboard(root,100,100,4)
 
 for x in range(50,60):
     for y in range(50,60):
-        w.draw(Point(x,y))
+        w.draw(Point(x,y),"blue")
         
 for i in range(10,90):
-    w.draw(Point(i,2*i))
+    w.draw(Point(i,2*i),"blue")
     
 root.mainloop()

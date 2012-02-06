@@ -5,13 +5,13 @@ from WhiteboardWindow import *
 import threading
 import time
 
-ww = WhiteboardWindow()
+ww = WhiteboardWindow(defaultPeriod=0.05)
 
 def draw():
 
     for x in range(50,60):
         for y in range(50,60):
-            ww.sleepDraw(Point(x,y))
+            ww.draw(Point(x,y))
             
 t = threading.Thread(target=draw)
 t.daemon = True
