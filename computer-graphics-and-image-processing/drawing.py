@@ -167,18 +167,19 @@ def midpoint_circle(wb,o,r):
     
     midpoint_circle_draw(wb,o,Point(x,y))
     
-    # Decision variable d = x^2 + y^2 - r^2
+    # Decision variable d = (x+1)^2 + (y-0.5)^2 - r^2 = x^2 + 2x + y^2 - y + 1.25 - r^2
     
-    d = x**2 + y**2 - r**2
+    d = (x+1)**2 + (y-0.5)**2 - r**2
     
     while x < (x1-0.5):
         x += 1
         if d < 0:
             # Go east.
-            d += 2*x + 1 # d' = (x+1)^2 + y^2 - r^2 = d + 2x + 1
+            d += 2*x + 3 # d' = (x+2)^2 + (y-0.5)^2 - r^2 = d + 2x + 3
+            
         else:
             # Go south east.
-            d += 2*x -2*y + 2 # d' = (x+1)^2 + (y+1)^2 - r^2 = d + 2x -2y + 2
+            d += 2*x - 2*y + 5 # d' = (x+2)^2 + (y-1.5)^2 - r^2 = x^2 + 2x + 4 + y^2 - 3y + 2.25 = d + 2x - 2y + 5 
             y -= 1
         midpoint_circle_draw(wb,o,Point(x,y))
 
