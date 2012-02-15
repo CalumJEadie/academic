@@ -33,3 +33,6 @@ class WhiteboardWindow(Tk):
             
         time.sleep(period)
         self.whiteboard.draw(point,colour)
+        
+    def clear(self):
+        self.whiteboard.clear()

@@ -94,3 +94,8 @@ class Whiteboard(Canvas):
     
         cpoint = self.getCPoint(wpoint)
         self.create_rectangle(cpoint.x,cpoint.y,cpoint.x+self.scaling,cpoint.y-self.scaling,outline=colour,fill=colour)
+        
+    def clear(self):
+    
+        # Niave clear implementation. Canvas appears not to have one?
+        self.create_rectangle(0,0,self.cwidth,self.cheight,outline="white",fill="white")

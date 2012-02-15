@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 """
-Implementing drawing algorithms from Computer Graphics and Image Processing.
+Implementations of drawing algorithms from "Computer Graphics and Image Processing".
 
 http://www.cl.cam.ac.uk/teaching/1112/CompGraph/
 """
@@ -210,6 +210,9 @@ class Line:
     def draw(self,wb):
     
         bresenham2(wb,self.p0,self.p1)
+        
+    def __str__(self):
+        return "Line({0},{1})".format(self.p0,self.p1)
     
 class BezierCubic:
 
@@ -219,8 +222,18 @@ class BezierCubic:
         self.p1 = p1
         self.p2 = p2
         self.p3 = p3
+        
+    def __str__(self):
+        return "BezierCubic({0},{1},{2},{3})".format(self.p0,self.p1,self.p2,self.p3)
     
 def bezier_cubic(wb,curve,tolerance):
+
+    print "bezier_cubic({0},{1})".format(curve,tolerance)
+    
+#    wb.draw(curve.p0,colour="red",period=0.1)
+#    wb.draw(curve.p1,colour="red",period=0.1)
+#    wb.draw(curve.p2,colour="red",period=0.1)
+#    wb.draw(curve.p3,colour="red",period=0.1)
 
     if is_bezier_cubic_flat(curve,tolerance):
     
@@ -258,7 +271,7 @@ def is_bezier_cubic_flat(curve,tolerance):
     
 def dist_point_to_point(p0,p1):
 
-    return ((p1.x-p0.x)**2+(p1.y-p1.x)**2)**0.5
+    return ((p1.x-p0.x)**2+(p1.y-p0.y)**2)**0.5
     
 def dist_point_to_line(line,p):
 

@@ -16,13 +16,28 @@ class CurveTest(WhiteboardWindow,threading.Thread):
     """Perform testing in different thread to allow for viewing progress of algorithms
     in real time."""
     def run(self):
+    
+        assert drawing.dist_point_to_point(Point(0,0),Point(10,0)) == 10
+        assert drawing.dist_point_to_point(Point(0,0),Point(3,4)) == 5
 
         curves = []
-        
+
+        curves.append(drawing.BezierCubic(Point(10,10),Point(10,10),Point(90,10),Point(90,10)))
+        curves.append(drawing.BezierCubic(Point(10,10),Point(10,10),Point(90,20),Point(90,20)))        
         curves.append(drawing.BezierCubic(Point(10,10),Point(10,40),Point(90,60),Point(90,20)))
 
         for curve in curves:
             drawing.bezier_cubic(self,curve,5)
+            
+        self.clear()
+            
+        for curve in curves:
+            drawing.bezier_cubic(self,curve,2)
+            
+        self.clear()
+            
+        for curve in curves:
+            drawing.bezier_cubic(self,curve,1)
 
 l = CurveTest()
 l.start()
