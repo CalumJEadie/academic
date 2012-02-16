@@ -4,6 +4,7 @@ from Whiteboard import Point
 from WhiteboardWindow import *
 import threading
 import drawing
+import debug
 
 class CurveTest(WhiteboardWindow,threading.Thread):
 
@@ -28,12 +29,14 @@ class CurveTest(WhiteboardWindow,threading.Thread):
 
         for curve in curves:
             drawing.bezier_cubic(self,curve,5)
-            
+
+        debug.pause()
         self.clear()
             
         for curve in curves:
             drawing.bezier_cubic(self,curve,2)
             
+        debug.pause()
         self.clear()
             
         for curve in curves:

@@ -1,5 +1,3 @@
-#! /usr/bin/python
-
 """
 Implementations of drawing algorithms from "Computer Graphics and Image Processing".
 
@@ -8,6 +6,10 @@ http://www.cl.cam.ac.uk/teaching/1112/CompGraph/
 
 from Whiteboard import Point
 import math
+
+__author__ = "Calum J. Eadie"
+__copyright__ = "Copyright (c) 2012, Calum J. Eadie"
+__license__ = "MIT"
 
 # To not distract from algorithms will use wb for WhiteboardWindow.
 
@@ -150,9 +152,9 @@ def midpoint_line(wb,p1,p2):
             y += 1
         wb.draw(Point(x,y))
         
-"""Uses midpoint circle algorithm to draw circle of integer radius r centered at
-the o."""
 def midpoint_circle(wb,o,r):
+    """Uses midpoint circle algorithm to draw circle of integer radius r centered at
+    the o."""
 
     print "Midpoint Circle (Origin): Radius {0}".format(r)
     
@@ -183,10 +185,12 @@ def midpoint_circle(wb,o,r):
             y -= 1
         midpoint_circle_draw(wb,o,Point(x,y))
 
-"""Takes a point to be drawn in the 2nd quadrant of circle with origin o at offset p
-and draws points in all quadrants.
-"""
+
 def midpoint_circle_draw(wb,o,p):
+    """Takes a point to be drawn in the 2nd quadrant of circle with origin o at offset p
+    and draws points in all quadrants.
+    """
+
     wb.draw(Point(o.x+p.y,o.y+p.x)) # Quadrant 1
     wb.draw(Point(o.x+p.x,o.y+p.y)) # Quadrant 2
     wb.draw(Point(o.x-p.x,o.y+p.y)) # Quadrant 3
@@ -213,6 +217,12 @@ class Line:
         
     def __str__(self):
         return "Line({0},{1})".format(self.p0,self.p1)
+    
+    def reverse(self):
+        """Create a copy of line with end points reversed.
+        """
+        
+        return Line(self.p1,self.p0)    
     
 class BezierCubic:
 
@@ -262,10 +272,10 @@ def subdivide_bezier_cubic(curve):
     
     return (left,right)
 
-"""Test whether curve lies within tolerance of line between curve.p0 and curve.p3
-by checking position of control points curve.p1 and curve.p2.
-"""
 def is_bezier_cubic_flat(curve,tolerance):
+    """Test whether curve lies within tolerance of line between curve.p0 and curve.p3
+    by checking position of control points curve.p1 and curve.p2.
+    """
 
     return dist_point_to_line(Line(curve.p0,curve.p3),curve.p1) < tolerance and dist_point_to_line(Line(curve.p0,curve.p3),curve.p2) < tolerance
     
@@ -301,7 +311,12 @@ class BoundingBox:
         self.yb = yb
         self.yt = yt
         
-def cohan_sutherland_clipper(box,line):
+    def __str__(self):
+        return "BoundingBox(xl:{0},xr:{1},yb:{2},yt:{3})".format(self.xl,self.xr,self.yb,self.yt)
+        
+def cohan_sutherland_clipper(wb,box,line):
+
+    print "cohan_sutherland_clipper({0},{1})".format(box,line)
 
     l0 = line.p0
     l1 = line.p1
@@ -309,20 +324,97 @@ def cohan_sutherland_clipper(box,line):
     # 4 bit code, one bit for each inquality
     a0 = l0.x < box.xl
     b0 = l0.x > box.xr
-    c0 = l0.y < box.yl
-    d0 = l0.y > box.yr
+    c0 = l0.y < box.yb
+    d0 = l0.y > box.yt
     
     a1 = l1.x < box.xl
     b1 = l1.x > box.xr
-    c1 = l1.y < box.yl
-    d1 = l1.y > box.yr
+    c1 = l1.y < box.yb
+    d1 = l1.y > box.yt
     
     if (a0 | b0 | c0 | d0 | a1 | b1 | c1 | d1) == False:
         # Accept
-        line.draw()
+        line.draw(wb)
     elif ((a0&a1) | (b0&b1) | (c0&c1) | (d0&d1)) == False:
         # Need to clip
         
-        return NotImplemented
+        if a0:
+            cohan_sutherland_clipper(wb,box,clip_left(line,box.xl))
+        elif b0:
+            cohan_sutherland_clipper(wb,box,clip_right(line,box.xr))
+        elif c0:
+            cohan_sutherland_clipper(wb,box,clip_bottom(line,box.yb))
+        elif d0:
+            cohan_sutherland_clipper(wb,box,clip_top(line,box.yt))
+        elif a1:
+            cohan_sutherland_clipper(wb,box,clip_left(line.reverse(),box.xl))
+        elif b1:
+            cohan_sutherland_clipper(wb,box,clip_right(line.reverse(),box.xr))
+        elif c1:
+            cohan_sutherland_clipper(wb,box,clip_bottom(line.reverse(),box.yb))
+        elif d1:
+            cohan_sutherland_clipper(wb,box,clip_top(line.reverse(),box.yt))
+        
+#            return NotImplemented
+    else:
+        print "Reject: {0}".format(line)
         
     # Otherwise reject, both ends outside.
+    
+def clip_left(line,xl):
+    l0 = line.p0
+    l1 = line.p1
+            
+    x = xl
+    y = l0.y + (float(l1.y-l0.y)*float(xl-l0.x))/float(l1.x-l0.x)
+    
+    return Line(Point(x,y),l1)
+
+def clip_right(line,xr):
+    l0 = line.p0
+    l1 = line.p1
+            
+    x = xr
+    y = l0.y + (float(l1.y-l0.y)*float(xr-l0.x))/float(l1.x-l0.x)
+    
+    return Line(Point(x,y),l1)
+
+def clip_top(line,yt):
+    l0 = line.p0
+    l1 = line.p1
+            
+    x = l0.x + (float(l1.x-l0.x)*float(yt-l0.y))/float(l1.y-l0.y)
+    y = yt
+    
+    return Line(Point(x,y),l1)
+
+def clip_bottom(line,yb):
+    l0 = line.p0
+    l1 = line.p1
+            
+    x = l0.x + (float(l1.x-l0.x)*float(yb-l0.y))/float(l1.y-l0.y)
+    y = yb
+    
+    return Line(Point(x,y),l1)
+            
+def square(p0,r,step=1):
+    """Generates a collection of endpoints that form are the perimeter of a square
+    of side 2r and center p0.
+    """
+    
+    x = p0.x + r/2
+    y = p0.y + r/2
+    p1s = [Point(x,y)]
+    while x > p0.x - r/2:
+        x -= step
+        p1s.append(Point(x,y))
+    while y > p0.y - r/2:
+        y -= step
+        p1s.append(Point(x,y))
+    while x < p0.x + r/2:
+        x += step
+        p1s.append(Point(x,y))
+    while y < p0.y + r/2:
+        y += step
+        p1s.append(Point(x,y))
+    return p1s

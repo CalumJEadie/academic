@@ -1,13 +1,3 @@
-#! /usr/bin/python
-
-"""Copyright (c) 2012 Calum J. Eadie <www.calumjeadie.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."""
-
 """Follows Tkinter design pattern as using classes that are widgets rather than
 creating high level object that would not be embeddable.
 
@@ -16,9 +6,13 @@ http://effbot.org/tkinterbook/canvas.htm"""
 
 from Tkinter import *
 
-"""Responsible for representing points on the whiteboard or canvas.
-"""
+__author__ = "Calum J. Eadie"
+__copyright__ = "Copyright (c) 2012, Calum J. Eadie"
+__license__ = "MIT"
+
 class Point:
+    """Responsible for representing points on the whiteboard or canvas.
+    """
 
     def __init__(self,x,y):
         self.x = x
@@ -43,9 +37,9 @@ class Point:
     def fromPoint(point):
         return Point(point.x,point.y)
 
-"""Provides a widget with basic drawing capabilities. Coordinate system has origin at bottom left.
-"""
 class Whiteboard(Canvas):
+    """Provides a widget with basic drawing capabilities. Coordinate system has origin at bottom left.
+    """
 
     def __init__(self,master,width,height,scaling):
     
@@ -62,10 +56,10 @@ class Whiteboard(Canvas):
         
     def printOutOfRangeErr(self,point0,point1):
         print "Out of range: {0} -> {1}".format(point0,point1)
-    
-    """Get canvas point from whiteboard point.
-    """
+        
     def getCPoint(self,point):
+        """Get canvas point from whiteboard point.
+        """
     
         wpoint = Point.fromPoint(point)
     
