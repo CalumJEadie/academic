@@ -1,3 +1,5 @@
+# Motivation behind this repository
+
 I get a great amount out of taking ideas from the abstract and implementing them. This
 repository is a mixture of explorations into concepts and algorithms, revision and some
 parts from my work ( although I'm quite aware of the department's view on supervision
