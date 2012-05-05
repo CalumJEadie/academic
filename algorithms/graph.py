@@ -7,6 +7,8 @@ class Graph():
     A representation of a graph using an adjacency list.
     """
     
+    INFINITY = float('inf')
+    
     vs = []
     es = []
     
@@ -22,6 +24,12 @@ class Graph():
             elif e.d == vertex:
                 adjacent.append(e.s)
         return adjacent
+        
+    def edge(self,u,v):
+        for e in es:
+            if e.s == u and e.d == v:
+                return e
+        return False
         
 class V():
     """
