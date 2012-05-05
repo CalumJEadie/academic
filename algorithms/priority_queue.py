@@ -1,3 +1,7 @@
+class PriorityQueue():
+    
+    INFINITY = float('inf')
+
 class PriorityQueueList(list):
     """
     Implementation of a priority queue using a python list.
