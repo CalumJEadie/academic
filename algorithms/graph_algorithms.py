@@ -230,3 +230,41 @@ def dijksta(g,source):
         v_shortest_path_determined.add(u)
         for v in g.adjacent(u)
             relax(g,u,v)
+            
+def ford_fulkerson(g):
+    for e in g.es:
+        e.flow = 0
+    augmenting_paths = []
+    while True:
+        augmenting_path = find_augementing_path(g,augmenting_paths)
+        if augmenting_path != False:
+            augumenting_paths.append(augmenting_path)
+        else:
+            return augmenting_paths
+            
+def bipartite_matching(l,r,es):
+    """
+    Solve bipartite matching problem by transforming to maximum flow.
+    
+    ls,rs - vertices
+    es - edges between partitions
+    """
+    
+    g = Graph(ls+rs,es)
+    
+    # Add unit capacities to edges from left to right partition
+    for e in es:
+        e.capacity = 1
+    
+    # Add supersource and supersink
+    super_source = V()
+    super_sink = V()
+    g.vs + [super_source,super_sink]
+    for l in ls:
+        g.es.append(E(super_source,l,Graph.INFINITY)
+    for r in rs:
+        g.es.append(E(r,super_sink,Graph.INFINITY)
+    
+    max_flow = find_maximum_flow(g,super_source,super_sink)
+    
+    return max_flow
