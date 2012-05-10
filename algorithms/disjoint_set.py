@@ -1,4 +1,7 @@
-class DisjointSetCollection()
+class DisjointSetCollection_PythonSet()
+    """
+    Implemementation of Disjoint Sets data structure using Python sets.
+    """
 
     sets = []
     
@@ -21,3 +24,47 @@ class DisjointSetCollection()
         assert set_x.isdisjoint(set_y)
         set_x = set_x.union(set_y)
         self.sets.remove(set_x)
+        
+class DisjointSetsCollection_Forest()
+    """
+    Implementation of Disjoint Sets data structure using a forest
+    of trees and using path compression and union by rank heuristics.
+    """
+    
+    sets = []
+    
+    def make_set(x):
+        """
+        Assumes x not in self.
+        """
+        
+        x.parent = x
+        x.rank = 0
+        self.sets.append(x)
+    
+    def find_set(self,x):
+        """
+        Assumes x in self.
+        """
+        
+        # Test if x is root of a tree
+        if x != x.parent:
+            # Find root of x and compress paths at same time.
+            x.p = self.find_set(x.p)
+        return x.p
+        
+    def union(self,x,y):
+        """
+        Assumes x and y in self.
+        """
+        
+        xp = self.find_set(x)
+        yp = self.find_set(y)
+        
+        if xp.rank > yp.rank:
+            yp.p = xp
+        elif xp.rank < yp.rank:
+            xp.p = yp
+        else:
+            xp.p = yp
+            yp.rank += 1
