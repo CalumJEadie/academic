@@ -7,6 +7,7 @@ import urllib2
 import random
 from BeautifulSoup import BeautifulSoup
 import time
+import concurrency_schemes
 
 # Producer and Consumer
 
@@ -113,6 +114,69 @@ class SemaphoreQueue():
         print "get() = %s" % str(item)[0:50]
         return item
         
-# Event Counter Implementation
+# Event Counte Implementation
+
+class EventCountQueue():
+    
+    def __init__(self,maxsize):
+        
+        self.queue = [0]*maxsize
+        
+        # Achieve mutual exclusion of head and tail using sequences.
+        self.pev = EventCount()
+        self.psq = Sequencer()
+        self.gev = EventCount()
+        self.gsq = Sequencer()
+        
+    def put(self,item):
+        print "put(%s)" % str(item)[0:50]
+        
+        turn = self.psq.ticket()
+        # Achieve mutual exclusion so each put writes to different part of the queue.
+        self.pev.await(turn)
+        # Wait until space available at the part of the queue assigned to the callee.
+        self.cev.await((turn-len(self.queue))+1)
+        self.queue[turn % len(self.queue)] = item
+        self.pev.advance()
+        
+    def get(self):
+        
+        turn = self.csq.ticket()
+        self.cev.await(turn)
+        # Wait until one more put than get has taken place.
+        self.pev.await(turn+1)
+        item = self.queue[turn % len(self.queue)]
+        self.cev.advance()
+        
+        print "get() = %s" % str(item)[0:50]
+        return item
 
 # Monitor Implementation
+
+class MonitorQueue(Lock):
+    
+    def __init__(self,maxsize):
+        
+        Lock.__init__(self)
+        
+        self.queue = [0]*maxsize
+        
+        # Achieve mutual exclusion of head and tail using lock on self.
+        self.head = 0
+        self.tail = 0
+        
+        self.notfull = Condition()
+        self.notempty = Condition()
+        
+    def put(self,item):
+        print "put(%s)" % str(item)[0:50]
+        
+        self.acquire() # Achieve mutual exclusion over queue, head and tail by locking on self.
+        self.notfull.acquire()
+        if self.tail-self.head == len(self.queue): # Would need to consider subtraction % N for working implementation.
+            self.notfull.wait()
+            
+        self.queue[self.tail % n] = item
+        self.tail += 1
+        self.notempty.signal()
+        self.release()
