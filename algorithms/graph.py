@@ -62,3 +62,50 @@ class E():
         
     def __repr__(self):
         return "E(%s,%s,%s)" % (self.s,self.d,self.w)
+        
+class Tree(V):
+    """
+    A representation of a n-ary tree.
+    """
+    
+    def __init__(self,v=None,children=[]):
+        V.__init__(self,v)
+        self.children = children
+        
+    def to_graph():
+        """
+        Converts into graph representation of the graph underlying the tree.
+        """
+        
+        if len(self.children) == 0:
+            
+            return Graph([self],[])
+            
+        else:
+            
+            es = []
+            vs = [self]
+            for child in self.children:
+                child_graph = child.to_graph()
+                vs.extend(child_graph.vs)
+                es.extend(child_graph.es)
+                es.append(E(self,child))
+                
+            return Graph(vs,es)
+            
+    def __str__(self):
+        
+        def indent(s):
+            return ''.join(map(lambda x: (" "*4)+x,s.splitlines()))
+        
+        if len(self.children) == 0:
+            
+            return "Tree(%s)" % (self.v)
+            
+        else:
+            
+            s = "Tree(%s,[\n"
+            for child in self.children:
+                s += indent(str(child))
+            s += ")
+            return s

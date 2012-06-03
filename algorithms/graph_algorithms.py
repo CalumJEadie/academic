@@ -15,7 +15,7 @@ def breadth_first_search(g,value):
     while True:
         
         if len(fringe) == 0:
-            raise False
+            return False
         node = fringe[0]
         if node.v == value:
             return True
@@ -39,7 +39,7 @@ def depth_first_search(g,value,depth_limit=0):
     while depth_limit == 0 or depth <= depth_limit:
         
         if len(fringe) == 0:
-            raise False
+            return False
         node = fringe[0]
         if node.v == value:
             return True
@@ -94,11 +94,12 @@ def topological_sort_visit(g,u,time,linear_ordering):
     for v in g.adjacent(u):
         if v.color == Color.WHITE:
             v.prev = u
-            dfs_visit(g,v)
+            topological_sort_visit(g,v)
     u.color = Color.BLACK
     time += 1
     u.finished = time
     linear_ordering.append(u)
+    return time
     
 def generic_mst(g):
     """
@@ -261,9 +262,9 @@ def bipartite_matching(l,r,es):
     super_sink = V()
     g.vs + [super_source,super_sink]
     for l in ls:
-        g.es.append(E(super_source,l,Graph.INFINITY)
+        g.es.append(E(super_source,l,1)
     for r in rs:
-        g.es.append(E(r,super_sink,Graph.INFINITY)
+        g.es.append(E(r,super_sink,1)
     
     max_flow = find_maximum_flow(g,super_source,super_sink)
     
