@@ -24,6 +24,9 @@ class Point:
     def __add__(self,other):
         return Point(self.x+other.x,self.y+other.y)
         
+    def __sub__(self,other):
+        return Point(self.x-other.x,self.y-other.y)
+        
     def __mul__(self,factor):
         # http://docs.python.org/reference/datamodel.html
         if isinstance(factor,int) or isinstance(factor,float):
@@ -32,10 +35,19 @@ class Point:
             return NotImplemented
             
     __rmul__ = __mul__
+            
+    def __div__(self,factor):
+        if isinstance(factor,int) or isinstance(factor,float):
+            return Point(self.x/factor,self.y/factor)
+        else:
+            return NotImplemented
     
     @staticmethod
     def fromPoint(point):
         return Point(point.x,point.y)
+        
+    def get_int_point(self):
+        return Point(int(self.x),int(self.y))
 
 class Whiteboard(Canvas):
     """Provides a widget with basic drawing capabilities. Coordinate system has origin at bottom left.

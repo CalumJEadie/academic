@@ -62,6 +62,8 @@ class LineTest(WhiteboardWindow,threading.Thread):
 #            drawing.midpoint_line(self,p0,p1)
             self.draw(p1)
             drawing.bresenham2(self,p0,p1)
+            
+        drawing.bresenham2(self,Point(10,10),Point(80,10),colour="red")
 
 l = LineTest()
 l.start()
